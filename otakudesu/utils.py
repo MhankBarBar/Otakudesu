@@ -33,17 +33,20 @@ class extracts:
         meki = {}
         puki = {}
         deel = {}
-        for _ in self.content.findAll('a', {'target': '_blank', 'data-wpel-link': 'internal'})[:-3]:
-            if ':' in _.text:pass
-            else:
-                for e in bs(get(_['href']).text, 'html.parser').find('div', {'class': 'download'}).findAll('ul'):
-                    for __ in e.findAll('li'):
-                        for ___ in __.findAll('a'):
-                            deel.update({___.text: ___['href']})
-                        puki.update({'_'+'_'.join(__.strong.text.split(' ')): deel})
-                        deel = {}
-                    meki.update({'eps'+''.join(filter(str.isdigit, _.text)) if '[BATCH]' not in _.text else 'batch': puki})
-        return meki
+        try:
+            for _ in self.content.findAll('a', {'target': '_blank', 'data-wpel-link': 'internal'})[:-3]:
+                if ':' in _.text:pass
+                else:
+                    for e in bs(get(_['href']).text, 'html.parser').find('div', {'class': 'download'}).findAll('ul'):
+                        for __ in e.findAll('li'):
+                            for ___ in __.findAll('a'):
+                                deel.update({___.text.lower(): ___['href']})
+                            puki.update({'_'+'_'.join(__.strong.text.lower().split(' ')): deel})
+                            deel = {}
+                        meki.update({'eps'+''.join(filter(str.isdigit, _.text)) if '[BATCH]' not in _.text else 'batch': puki})
+            return meki
+        except AttributeError:
+            return []
 
     def __str__(self) -> str:
         return '<[title: %s]>' % self.title
@@ -79,6 +82,7 @@ class extractFromSchedule:
             self.result.update({days[count]: res})
             count += 1
             res = []
+        # self.result = loads(dumps(self.result), object_hook=lambda d: SN(**d))
 
     def __str__(self) -> str:
         return '<[result: %s]>' % self.result.__len__()
