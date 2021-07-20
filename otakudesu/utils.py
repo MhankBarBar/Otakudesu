@@ -21,11 +21,26 @@ class extracts:
         if self.url:
             sinfo = list(self.content.find('div', {'class': 'infozingle'}).strings)
             genres = []
+            linkdl = self.extractLink
             for _ in self.content.findAll('a', {'rel': 'tag'}):
                 if _['href'] == ' ':pass
                 else:genres.append(_.text)
-            results = {'title': self.title, 'thumbnail': self.content.img['src'], 'jp_title': sinfo[3].strip(': '), 'rating': sinfo[5].strip(': '), 'producers': sinfo[7].strip(': '), 'type': sinfo[9].strip(': '), 'status': sinfo[11].strip(': '), 'episodes': sinfo[13].strip(': '), 'duration': sinfo[15].strip(': '), 'release_date': sinfo[17].strip(': '), 'genres': genres, 'synopsis': self.content.find('div', {'class': 'sinopc'}).text}
+            results = {'title': self.title, 'thumbnail': self.content.img['src'], 'jp_title': sinfo[3].strip(': '), 'rating': sinfo[5].strip(': '), 'producers': sinfo[7].strip(': '), 'type': sinfo[9].strip(': '), 'status': sinfo[11].strip(': '), 'episodes': sinfo[13].strip(': '), 'duration': sinfo[15].strip(': '), 'release_date': sinfo[17].strip(': '), 'genres': genres, 'synopsis': self.content.find('div', {'class': 'sinopc'}).text, 'downloads': linkdl}
             return loads(dumps(results), object_hook=lambda d: SN(**d))
+
+    @property
+    def extractLink(self):
+        meki = {}
+        deel = []
+        for _ in self.content.findAll('a', {'target': '_blank', 'data-wpel-link': 'internal'})[:-3]:
+            if ':' in _.text:pass
+            else:
+                for __ in bs(get(_['href']).text, 'html.parser').find('div', {'class': 'download'}).ul.findAll('li'):
+                    for ___ in __.findAll('a'):
+                        deel.append({___.text: ___['href']})
+                    meki.update({'eps'+''.join(filter(str.isdigit, _.text)) if '[BATCH]' not in _.text else 'batch': {'_'+__.strong.text.replace(' ','_'): deel}})
+                    deel = []
+        return meki
 
     def __str__(self) -> str:
         return '<[title: %s]>' % self.title
@@ -57,7 +72,6 @@ class extractFromSchedule:
         for _ in content:
             for __ in _.findAll('a'):
                 with ThreadPoolExecutor(max_workers=3) as moe:
-                    print(__['href'])
                     if 'anime' in __['href']:res.append(moe.submit(extracts, __['href']).result().extract)
             self.result.update({days[count]: res})
             count += 1
