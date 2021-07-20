@@ -5,7 +5,7 @@ setup(
   name = 'otakudesu',
   packages = ['otakudesu'],
   include_package_data=True,
-  version = '0.0.1',
+  version = '0.0.3',
   license = 'MIT',
   description = 'Otakudesu Scrapper',
   long_description_content_type = 'text/markdown',
@@ -13,7 +13,7 @@ setup(
   author = 'MhankBarBar',
   author_email = 'mhankbarbar@yes.my',
   url = 'https://github.com/MhankBarBar/otakudesu',
-  download_url = 'https://github.com/MhankBarBar/otakudesu/archive/0.0.1.tar.gz',
+  download_url = 'https://github.com/MhankBarBar/otakudesu/archive/0.0.3.tar.gz',
   keywords = ['anime', 'anime sub indo', 'anime scrapper', 'animeindo', 'animelovers'],
   install_requires=[           
           'validators',

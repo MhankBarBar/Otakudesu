@@ -31,15 +31,18 @@ class extracts:
     @property
     def extractLink(self):
         meki = {}
-        deel = []
+        puki = {}
+        deel = {}
         for _ in self.content.findAll('a', {'target': '_blank', 'data-wpel-link': 'internal'})[:-3]:
             if ':' in _.text:pass
             else:
-                for __ in bs(get(_['href']).text, 'html.parser').find('div', {'class': 'download'}).ul.findAll('li'):
-                    for ___ in __.findAll('a'):
-                        deel.append({___.text: ___['href']})
-                    meki.update({'eps'+''.join(filter(str.isdigit, _.text)) if '[BATCH]' not in _.text else 'batch': {'_'+__.strong.text.replace(' ','_'): deel}})
-                    deel = []
+                for e in bs(get(_['href']).text, 'html.parser').find('div', {'class': 'download'}).findAll('ul'):
+                    for __ in e.findAll('li'):
+                        for ___ in __.findAll('a'):
+                            deel.update({___.text: ___['href']})
+                        puki.update({'_'+'_'.join(__.strong.text.split(' ')): deel})
+                        deel = {}
+                    meki.update({'eps'+''.join(filter(str.isdigit, _.text)) if '[BATCH]' not in _.text else 'batch': puki})
         return meki
 
     def __str__(self) -> str:
