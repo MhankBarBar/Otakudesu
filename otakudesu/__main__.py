@@ -47,8 +47,9 @@ class Base:
     def showeps(self, obj):
         eps = list(obj.downloads.__dict__.keys())[::-1]
         for k, v in enumerate(eps, 1):
-            print("  %s. %s" % (k, v.replace("eps","Episode ").replace("batch", "Batch")))
+            print("  %s. %s" % (k, v.replace("eps","Episode ").title()))
         chos = int(input("\n  ➯ Choose : "))
+        if chos == 99:Main().__main__()
         if chos > 0 and chos-1 < len(eps):
             self.showdl(obj.downloads.__dict__.get(eps[chos-1]))
         else:
@@ -58,8 +59,9 @@ class Base:
         qlt = list(obj.__dict__.keys())[::-1]
         print("\n")
         for k, v in enumerate(qlt, 1):
-            print("  %s.%s" % (k, v.replace('_',' ')))
+            print("  %s.%s" % (k, v.replace("_"," ")))
         chos = int(input("\n  ➯ Choose : "))
+        if chos == 99:Main().__main__()
         if chos > 0 and chos-1 < len(qlt):
             self.showlink(obj.__dict__.get(qlt[chos-1]))
         else:
@@ -71,9 +73,10 @@ class Base:
         for k, v in enumerate(deel, 1):
             print("  %s. %s" % (k, v))
         chos = int(input("\n  ➯ Choose : "))
+        if chos == 99:Main().__main__()
         if chos > 0 and chos-1 < len(deel):
-            call(["termux-clipboard-set", obj.__dict__.get(deel[chos-1])])
-            print("  ✓ Link Copied To Clipboard")
+            call(["termux-clipboard-set", obj.__dict__.get(deel[chos-1])]) # Only work on termux
+            print(f"  {obj.__dict__.get(deel[chos-1])}\n  Copied To Clipboard")
             exit(0)
         else:
             print("  ╳ Invalid Input")
@@ -90,7 +93,7 @@ class Main(Base):
 
   1. Search
   2. From Url
-  3. From Schedule
+  3. From Schedule (It's taking a long time)
   4. Contact
   """
     def __main__(self):
@@ -102,7 +105,7 @@ class Main(Base):
                     quer = input("  ➯ Query : ")
                     print("\n")
                     self.loads()
-                    if(hasil := otak.search(quer).result):
+                    if (hasil := otak.search(quer).result):
                         matte.insert(0, True)
                         sus = []
                         for k, v in enumerate(hasil, 1):
@@ -134,12 +137,42 @@ class Main(Base):
                         self.showeps(hasil)
                     else:
                         matte.insert(0, True)
-                        print("  ╳ Invalid Input")
+                        print("  ╳ Error while scraping")
                 elif mek == 3:
-                    exit("  I will added this on next version")
-                    #print("\n")
-                    #self.loads()
-                    #if (hasil := otak.getSchedule)
+                    print("\n")
+                    self.loads()
+                    if (hasil := otak.getSchedule.result):
+                        matte.insert(0, True)
+                        sus = []
+                        print("\n")
+                        for k, v in enumerate(list(hasil.keys()), 1):
+                            print("  %s. %s" % (k, v))
+                            sus.append(v)
+                        print("  99. Back to main menu")
+                        while(True):
+                            if (pil := int(input("  ➯ Choose : "))):
+                                if pil == 99:self.__main__()
+                                if pil > 0 and pil-1 < len(sus):
+                                    sis = []
+                                    for k, v in enumerate(hasil[sus[pil-1]], 1):
+                                        print("  %s. %s" % (k, v.title))
+                                        sis.append(v)
+                                    if (pul := int(input("  ➯ Choose : "))):
+                                        if pul == 99:self.__main__()
+                                        if pul > 0 and pul-1 < len(sis):
+                                            self.show(sis[pul-1])
+                                            self.showeps(sis[pul-1])
+                                        else:
+                                            print("  ╳ Invalid Input")
+                                    else:
+                                        print("  ╳ Invalid Input")
+                                else:
+                                    print("  ╳ Invalid Input")
+                            else:
+                                print("  ╳ Invalid Input")
+                    else:
+                        matte.insert(0, True)
+                        print("  ╳ Error while scraping")
                 elif mek == 4:
                     call(["xdg-open", self.contact])
                     self.__main__()

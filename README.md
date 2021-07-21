@@ -3,7 +3,11 @@
 ```bash
 > pip install otakudesu
 ```
+# Run on terminal
 
+```bash
+> python -m otakudesu
+```
 # Python Interpreter
 ## Search by query
 ```python
@@ -25,8 +29,4 @@
 >>> otakudesu = OtakuDesu()
 >>> x=otakudesu.byUrl('https://otakudesu.moe/anime/saenai-heroine-subtitle-indonesia/')
 >>> x
-```
-# Run on terminal
-```bash
-> python -m otakudesu
 ```
