@@ -25,7 +25,7 @@ class extracts:
             for _ in self.content.findAll('a', {'rel': 'tag'}):
                 if _['href'] == ' ':pass
                 else:genres.append(_.text)
-            results = {'title': self.title, 'thumbnail': self.content.img['src'], 'jp_title': sinfo[3].strip(': '), 'rating': sinfo[5].strip(': '), 'producers': sinfo[7].strip(': '), 'type': sinfo[9].strip(': '), 'status': sinfo[11].strip(': '), 'episodes': sinfo[13].strip(': '), 'duration': sinfo[15].strip(': '), 'release_date': sinfo[17].strip(': '), 'genres': genres, 'synopsis': self.content.find('div', {'class': 'sinopc'}).text, 'downloads': linkdl}
+            results = {'title': self.title, 'thumbnail': self.content.img['src'], 'jp_title': sinfo[3].strip(': '), 'rating': sinfo[5].strip(': '), 'producers': sinfo[7].strip(': '), 'type': sinfo[9].strip(': '), 'status': sinfo[11].strip(': '), 'episodes': sinfo[13].strip(': '), 'duration': sinfo[15].strip(': '), 'release_date': sinfo[17].strip(': '), 'genres': genres, 'synopsis': self.content.find('div', {'class': 'sinopc'}).text, 'downloads': linkdl, 'studio': sinfo[19].strip(': ')}
             return loads(dumps(results), object_hook=lambda d: SN(**d))
 
     @property
@@ -43,7 +43,7 @@ class extracts:
                                 deel.update({___.text.lower(): ___['href']})
                             puki.update({'_'+'_'.join(__.strong.text.lower().split(' ')): deel})
                             deel = {}
-                        meki.update({'eps'+''.join(filter(str.isdigit, _.text)) if '[BATCH]' not in _.text else 'batch': puki})
+                        meki.update({'eps'+''.join(filter(str.isdigit, _.text.split('Episode')[1].split()[0])) if '[BATCH]' not in _.text else 'batch': puki})
             return meki
         except AttributeError:
             return []

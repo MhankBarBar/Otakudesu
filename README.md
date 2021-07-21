@@ -26,3 +26,7 @@
 >>> x=otakudesu.byUrl('https://otakudesu.moe/anime/saenai-heroine-subtitle-indonesia/')
 >>> x
 ```
+# Run on terminal
+```bash
+> python -m otakudesu
+```
