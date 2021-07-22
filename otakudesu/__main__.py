@@ -1,4 +1,4 @@
-from os import get_terminal_size
+from os import get_terminal_size, system as sys
 from . import OtakuDesu
 import itertools
 from time import sleep
@@ -13,7 +13,7 @@ class Base:
 
     def __init__(self):
         self.contact = "https://wa.me/6285892766102"
-        self.clear = (lambda : call(["clear" if system() == "Linux" else "cls"]))
+        self.clear = (lambda : sys("cls" if system() == "Windows" else "clear"))
 
     def randco(self, text):
         lcol = ["\x1b[1;31m","\x1b[1;32m","\x1b[1;33m","\x1b[1;34m","\x1b[1;35m","\x1b[1;36m"]
