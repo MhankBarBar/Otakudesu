@@ -43,7 +43,7 @@ class extracts:
                                 deel.update({___.text.lower(): ___['href']})
                             puki.update({'_'+'_'.join(__.strong.text.lower().split(' ')): deel})
                             deel = {}
-                        meki.update({'eps'+''.join(filter(str.isdigit, _.text.split('Episode')[1].split()[0])) if '[BATCH]' not in _.text else 'batch': puki})
+                        meki.update({'eps'+''.join(filter(str.isdigit, _.text.split('Episode')[1].split()[0])) if 'batch' not in _.text.lower() else 'batch': puki})
             return meki
         except AttributeError:
             return []

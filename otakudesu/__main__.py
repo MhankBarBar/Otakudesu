@@ -1,10 +1,11 @@
+from os import get_terminal_size
 from . import OtakuDesu
 import itertools
 from time import sleep
 from subprocess import call
 from threading import Thread
 from random import choice
-
+from textwrap import wrap
 otak = OtakuDesu()
 
 class Base:
@@ -28,21 +29,21 @@ class Base:
 
     def show(self, obj):
         # self.clear()
-        print(f"""
+        print("""
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ➯ Title : {obj.title}
-  ➯ Japanese Title : {obj.jp_title}
-  ➯ Score : {obj.rating}
-  ➯ Producers : {obj.producers}
-  ➯ Studio : {obj.studio}
-  ➯ Type : {obj.type}
-  ➯ Status : {obj.status}
-  ➯ Episodes : {obj.episodes}
-  ➯ Duration : {obj.duration}
-  ➯ Release Date : {obj.release_date}
-  ➯ Genre : {', '.join(obj.genres)}
-  ➯ Synopsis : {obj.synopsis}
-  """)
+  ➯ Title : %s
+  ➯ Japanese Title : %s
+  ➯ Score : %s
+  ➯ Producers : %s
+  ➯ Studio : %s
+  ➯ Type : %s
+  ➯ Status : %s
+  ➯ Episodes : %s
+  ➯ Duration : %s
+  ➯ Release Date : %s
+  ➯ Genre : %s
+  ➯ Synopsis : %s
+  """ % (obj.title, obj.jp_title, obj.rating, obj.producers, obj.studio, obj.type, obj.status, obj.episodes, obj.duration, obj.release_date, ", ".join(obj.genres), "\n           ".join(wrap(obj.synopsis, get_terminal_size()[0]-12))))
 
     def showeps(self, obj):
         eps = list(obj.downloads.__dict__.keys())[::-1]
@@ -181,7 +182,7 @@ class Main(Base):
             else:
                 print("  ╳ Invalid Input")
         except Exception as e:
-            # print(e)
+            print(e)
             exit("  ╳ An error occurred")
 
 if __name__ == "__main__":
