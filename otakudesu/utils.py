@@ -14,7 +14,8 @@ class extracts:
         if validators.url(url) and 'https://otakudesu.moe' in url:
             self.url = url
             self.content = bs(get(self.url).text, 'html.parser').find('div', {'class': 'venser'})
-            self.title = list(self.content.find('div', {'class': 'infozingle'}).strings)[1].strip(': ')
+            self.anu = list(self.content.find('div', {'class': 'infozingle'}).strings)
+            self.title = self.anu[1].strip(': ')
 
     @property
     def extract(self):
@@ -43,7 +44,7 @@ class extracts:
                                 deel.update({___.text.lower(): ___['href']})
                             puki.update({'_'+'_'.join(__.strong.text.lower().split(' ')): deel})
                             deel = {}
-                        meki.update({'eps'+''.join(filter(str.isdigit, _.text.split('Episode')[1].split()[0])) if 'batch' not in _.text.lower() else 'batch': puki})
+                        meki.update({'eps'+''.join(filter(str.isdigit, _.text.split('Episode')[1].split()[0])) if 'batch' not in _.text.lower() and 'episode' in _.text.lower() else 'batch': puki})
             return meki
         except AttributeError:
             return []

@@ -3,6 +3,7 @@ from . import OtakuDesu
 import itertools
 from time import sleep
 from subprocess import call
+from platform import system
 from threading import Thread
 from random import choice
 from textwrap import wrap
@@ -12,7 +13,7 @@ class Base:
 
     def __init__(self):
         self.contact = "https://wa.me/6285892766102"
-        self.clear = (lambda : call(["clear"]))
+        self.clear = (lambda : call(["clear" if system() == "Linux" else "cls"]))
 
     def randco(self, text):
         lcol = ["\x1b[1;31m","\x1b[1;32m","\x1b[1;33m","\x1b[1;34m","\x1b[1;35m","\x1b[1;36m"]
@@ -76,9 +77,13 @@ class Base:
         chos = int(input("\n  ➯ Choose : "))
         if chos == 99:Main().__main__()
         if chos > 0 and chos-1 < len(deel):
-            call(["termux-clipboard-set", obj.__dict__.get(deel[chos-1])]) # Only work on termux
-            print(f"  {obj.__dict__.get(deel[chos-1])}\n  Copied To Clipboard")
-            exit(0)
+            try:
+                call(["termux-clipboard-set", obj.__dict__.get(deel[chos-1])]) # Only work on termux
+                print(f"  {obj.__dict__.get(deel[chos-1])}\n  Copied To Clipboard")
+                exit(0)
+            except:
+                print(f"  Result: {obj.__dict__.get(deel[chos-1])}")
+                exit(0)
         else:
             print("  ╳ Invalid Input")
 
